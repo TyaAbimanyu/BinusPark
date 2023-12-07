@@ -18,13 +18,14 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:src="@drawable/ic_action_back"
+        android:contentDescription="@string/back_button"
         />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User Profile"
-        android:textSize="18dp"
+        android:text="@string/profile_title"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:gravity="center"
@@ -48,66 +49,79 @@
         android:paddingRight="25dp">
 
         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Full name"
-        android:textSize="14dp"
-        android:textColor="@color/gray"/>
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:textSize="16dp"
-            android:text="Amanda Chase"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email address"
-            android:textSize="14dp"
+            android:text="@string/profile_dataT1"
+            android:textSize="14sp"
             android:textColor="@color/gray"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="16dp"
-            android:text="amychase@gmail.com"/>
+            android:textSize="16sp"
+            android:text="@string/profile_data1"
+            android:hint="@string/full_name"
+            android:autofillHints="Full name"
+            android:inputType="text"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full name"
-            android:textSize="14dp"
+            android:text="@string/profile_dataT2"
+            android:textSize="14sp"
             android:textColor="@color/gray"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="16dp"
-            android:text="09033421159"/>
+            android:textSize="16sp"
+            android:text="@string/profile_data2"
+            android:hint="@string/email"
+            android:autofillHints="Email Address"
+            android:inputType="textEmailAddress"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full name"
-            android:textSize="14dp"
+            android:text="@string/profile_dataT3"
+            android:textSize="14sp"
             android:textColor="@color/gray"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="16dp"
-            android:text="09033421159"/>
-         </LinearLayout>
+            android:textSize="16sp"
+            android:text="@string/profile_data3"
+            android:hint="@string/phone"
+            android:autofillHints="Phone number"
+            android:inputType="number"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_dataT4"
+            android:textSize="14sp"
+            android:textColor="@color/gray"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="16sp"
+            android:text="@string/profile_data4"
+            android:hint="@string/password"
+            android:autofillHints="Password"
+            android:inputType="textPassword"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Save"
+        android:text="@string/edit1"
         android:backgroundTint="@color/purple"
         />
 
