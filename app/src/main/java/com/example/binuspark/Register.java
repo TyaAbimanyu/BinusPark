@@ -19,10 +19,13 @@ import com.google.android.gms.tasks.Task;
 
 public class Register extends AppCompatActivity {
 
+    EditText nameTextView, phonenumTextView;
      EditText emailTextView, passwordTextView;
      Button Btn;
      ProgressBar progressbar;
      FirebaseAuth mAuth;
+
+    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +36,24 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // initialising all views through id defined above
+        nameTextView = findViewById(R.id.nameET);
         emailTextView = findViewById(R.id.emailET);
         passwordTextView = findViewById(R.id.passwdET);
+        phonenumTextView = findViewById(R.id.phonenumET);
         Btn = findViewById(R.id.btnregister);
         progressbar = findViewById(R.id.progressbar);
+
+
+        dbHandler = new DBHandler(Register.this);
 
         Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 registerNewUser();
             }
+
+
+
         });
     }
         private void registerNewUser() {
@@ -51,9 +62,12 @@ public class Register extends AppCompatActivity {
             progressbar.setVisibility(View.VISIBLE);
 
             // Take the value of two edit texts in Strings
-            String email, password;
+            String name, email, password;
+            String phonenum;
+            name = nameTextView.getText().toString();
             email = emailTextView.getText().toString();
             password = passwordTextView.getText().toString();
+            phonenum = phonenumTextView.getText().toString();
 
             // Validations for input email and password
             if (TextUtils.isEmpty(email)) {
@@ -70,6 +84,8 @@ public class Register extends AppCompatActivity {
                         .show();
                 return;
             }
+
+            dbHandler.addNewUser(name, email, password, Integer.parseInt(phonenum));
 
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
@@ -91,5 +107,7 @@ public class Register extends AppCompatActivity {
                             }
                         }
                     });
+
+
         }
 }
