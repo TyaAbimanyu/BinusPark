@@ -1,8 +1,14 @@
 package com.example.binuspark;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,6 +49,24 @@ public class PaymentActivity extends AppCompatActivity
       public void onClick(View view) {
         Intent next = new Intent(PaymentActivity.this, SuccessActivity.class);
         startActivity(next);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          String channelId = "binuspark";
+          CharSequence channelName = "BinusPark";
+          int importance = NotificationManager.IMPORTANCE_DEFAULT;
+          NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+          NotificationManager notificationManager = getSystemService(NotificationManager.class);
+          notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "binuspark")
+                .setSmallIcon(R.drawable.paymentqr)
+                .setContentTitle("Payment Success")
+                .setContentText("you sucessfully booked a parking spot.")
+                .setAutoCancel(true);
+
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(0, mBuilder.build());
       }
     });
   }
