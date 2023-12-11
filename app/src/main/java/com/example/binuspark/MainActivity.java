@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         butt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Login.class);
+                Intent intent = new Intent(MainActivity.this, testDB.class);
                 startActivity(intent);
             }
         });

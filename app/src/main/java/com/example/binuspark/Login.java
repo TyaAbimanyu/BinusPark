@@ -17,81 +17,120 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
 
-    Button buttR;
-    EditText emailTextView, passwordTextView;
-    Button Btn;
-    ProgressBar progressbar;
-    FirebaseAuth mAuth;
+    EditText emailET, passET;
+    Button loginButton;
+    TextView registerRedirectText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        emailTextView = findViewById(R.id.email);
-        passwordTextView = findViewById(R.id.password);
-        Btn = findViewById(R.id.login);
-        progressbar = findViewById(R.id.progressBar);
+        emailET = findViewById(R.id.emailLoginET);
+        passET = findViewById(R.id.passwordLoginET);
+        registerRedirectText = findViewById(R.id.RegisterRedirect);
+        loginButton = findViewById(R.id.loginBTN);
 
-        buttR = findViewById(R.id.RegisterButton);
-
-        Btn.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                loginUserAccount();
+            public void onClick(View view) {
+                if (!emailValidation() | !passwordValidation()) {
+
+                } else {
+                    userLoginValidation();
+                }
             }
         });
 
-        buttR.setOnClickListener(new View.OnClickListener() {
+        registerRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
             }
         });
     }
 
-    private void loginUserAccount() {
-
-        progressbar.setVisibility(View.VISIBLE);
-
-        String email, password;
-        email = emailTextView.getText().toString();
-        password = passwordTextView.getText().toString();
-
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email!!", Toast.LENGTH_LONG).show();
-            return;
+    public Boolean emailValidation() {
+        String str = emailET.getText().toString();
+        if (str.isEmpty()) {
+            emailET.setError("Username must be filled!");
+            return false;
+        } else {
+            emailET.setError(null);
+            return true;
         }
+    }
 
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password!!", Toast.LENGTH_LONG).show();
-            return;
+
+    public Boolean passwordValidation() {
+        String str = passET.getText().toString();
+        if (str.isEmpty()) {
+            passET.setError("Password must be filled!");
+            return false;
+        } else {
+            passET.setError(null);
+            return true;
         }
+    }
 
+    public void userLoginValidation() {
+        String userUsername = "Jomav";
+        String userEmail = emailET.getText().toString().trim();
+        String userPassword = passET.getText().toString().trim();
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
+
+        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(
-                    @NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Login successful!!", Toast.LENGTH_LONG).show();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    progressbar.setVisibility(View.GONE);
+                if (snapshot.exists()) {
+                    emailET.setError(null);
+                    String passwordFromDB = snapshot.child(userEmail).child("password").getValue(String.class);
 
-                    Intent intent = new Intent(Login.this, MainActivity2.class);
-                    startActivity(intent);
+                    if (passwordFromDB.equals(userPassword)) {
+                        emailET.setError(null);
+
+                        //Pass the data using intent
+
+//                        String nameFromDB = snapshot.child(userEmail).child("name").getValue(String.class);
+//                        String emailFromDB = snapshot.child(userEmail).child("email").getValue(String.class);
+//                        String usernameFromDB = snapshot.child(userEmail).child("username").getValue(String.class);
+
+                        Intent intent = new Intent(Login.this, MainActivity2.class);
+
+//                        intent.putExtra("name", nameFromDB);
+//                        intent.putExtra("email", emailFromDB);
+//                        intent.putExtra("username", usernameFromDB);
+//                        intent.putExtra("password", passwordFromDB);
+
+                        startActivity(intent);
+                    } else {
+                        passET.setError("Password Incorrect, Please try again !!!");
+                        passET.requestFocus();
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Login failed!!", Toast.LENGTH_LONG).show();
-
-                    progressbar.setVisibility(View.GONE);
+                    emailET.setError("User is not registered !!!");
+                    emailET.requestFocus();
                 }
             }
-        });
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 }
