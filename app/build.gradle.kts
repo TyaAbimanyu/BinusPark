@@ -9,8 +9,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.binuspark"
-        minSdk = 32
-        targetSdk = 32
+        minSdk = 30
+        targetSdk = 30
         versionCode = 1
         versionName = "1.0"
 
